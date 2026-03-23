@@ -123,4 +123,4 @@ This Action is intentionally narrow:
 
 - [Build Metrics plugin docs](https://github.com/Alexartx/UnityBuildMetrics/tree/main/packages/unity-plugin)
 - [GitHub Actions integration guide](https://github.com/Alexartx/UnityBuildMetrics/blob/main/packages/unity-plugin/Documentation~/ci-cd/github-actions.md)
-- [Build Metrics site](https://buildmetrics.moonlightember.com)
+- [Build Metrics site](https://moonlightember.com/products/build-metrics)
