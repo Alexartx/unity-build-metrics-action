@@ -31,6 +31,24 @@ inputs:
     description: Optional output root passed to game-ci/unity-builder.
     required: false
     default: build
+  android-keystore-name:
+    description: Optional Android keystore filename forwarded to unity-builder.
+    required: false
+  android-keystore-base64:
+    description: Optional base64-encoded Android keystore content forwarded to unity-builder.
+    required: false
+  android-keystore-pass:
+    description: Optional Android keystore password forwarded to unity-builder.
+    required: false
+  android-keyalias-name:
+    description: Optional Android key alias name forwarded to unity-builder.
+    required: false
+  android-keyalias-pass:
+    description: Optional Android key alias password forwarded to unity-builder.
+    required: false
+  android-export-type:
+    description: Optional Android export type forwarded to unity-builder, for example androidPackage or androidAppBundle.
+    required: false
   github-token:
     description: Optional Git token forwarded to unity-builder as gitPrivateToken when needed.
     required: false
@@ -94,6 +112,12 @@ runs:
         customParameters: ${{ steps.compose-parameters.outputs.custom_parameters }}
         buildName: ${{ inputs.build-name }}
         buildsPath: ${{ inputs.builds-path }}
+        androidKeystoreName: ${{ inputs.android-keystore-name }}
+        androidKeystoreBase64: ${{ inputs.android-keystore-base64 }}
+        androidKeystorePass: ${{ inputs.android-keystore-pass }}
+        androidKeyaliasName: ${{ inputs.android-keyalias-name }}
+        androidKeyaliasPass: ${{ inputs.android-keyalias-pass }}
+        androidExportType: ${{ inputs.android-export-type }}
         allowDirtyBuild: ${{ inputs.allow-dirty-git }}
         gitPrivateToken: ${{ inputs.github-token }}
 

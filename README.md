@@ -71,6 +71,12 @@ jobs:
 | `custom-parameters` | No | - | Additional Unity custom parameters. |
 | `build-name` | No | - | Optional build name passed to GameCI. |
 | `builds-path` | No | `build` | Output root passed to GameCI. |
+| `android-keystore-name` | No | - | Android keystore filename forwarded to GameCI for signed Android builds. |
+| `android-keystore-base64` | No | - | Base64-encoded Android keystore content forwarded to GameCI. |
+| `android-keystore-pass` | No | - | Android keystore password forwarded to GameCI. |
+| `android-keyalias-name` | No | - | Android key alias name forwarded to GameCI. |
+| `android-keyalias-pass` | No | - | Android key alias password forwarded to GameCI. |
+| `android-export-type` | No | - | Android export type such as `androidPackage` or `androidAppBundle`. |
 | `github-token` | No | - | Optional token forwarded to `gitPrivateToken`. |
 | `allow-dirty-git` | No | `false` | Allow builds with uncommitted git changes. |
 
@@ -99,6 +105,25 @@ Check:
 - the build actually ran inside Unity, not only a packaging step
 
 This Action passes Build Metrics data both as environment variables and as Unity `customParameters` so the plugin works inside the GameCI container.
+
+### Android build fails during signing
+
+If your Unity project uses a custom Android keystore, pass the standard GameCI Android signing inputs through this Action:
+
+- `android-keystore-name`
+- `android-keystore-base64`
+- `android-keystore-pass`
+- `android-keyalias-name`
+- `android-keyalias-pass`
+
+Typical GitHub secrets for that setup are:
+
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_KEYSTORE_PASS`
+- `ANDROID_KEYALIAS_NAME`
+- `ANDROID_KEYALIAS_PASS`
+
+See the Android example for a full signed-build workflow.
 
 ### Unity license activation fails
 

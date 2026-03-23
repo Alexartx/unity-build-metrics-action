@@ -29,6 +29,11 @@ jobs:
           target-platform: Android
           build-name: MyGame
           build-metrics-api-key: ${{ secrets.BUILD_METRICS_API_KEY }}
+          android-keystore-name: garden_cards.keystore
+          android-keystore-base64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          android-keystore-pass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          android-keyalias-name: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          android-keyalias-pass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
