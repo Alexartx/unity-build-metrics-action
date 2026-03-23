@@ -1,0 +1,35 @@
+name: Custom Build Method
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ github.ref }}
+          restore-keys: |
+            Library-WebGL-
+            Library-
+
+      - name: Build with custom method
+        uses: moonlightember/unity-build-metrics-action@v1
+        with:
+          unity-version: auto
+          target-platform: WebGL
+          build-method: Company.Editor.BuildScript.BuildRelease
+          custom-parameters: -profile Release -enableAddressables
+          build-metrics-api-key: ${{ secrets.BUILD_METRICS_API_KEY }}
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}

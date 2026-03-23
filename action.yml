@@ -1,0 +1,115 @@
+name: Unity Build Metrics
+description: Build Unity projects with GameCI and automatically upload build size and build time metrics to Build Metrics.
+branding:
+  icon: activity
+  color: green
+
+inputs:
+  unity-version:
+    description: Unity version to build with. Use auto to read ProjectVersion.txt.
+    required: true
+  target-platform:
+    description: Target platform to build, for example Android, iOS, WebGL, or StandaloneWindows64.
+    required: true
+  build-metrics-api-key:
+    description: Build Metrics API key used by the Unity plugin during the build.
+    required: true
+  project-path:
+    description: Path to the Unity project root.
+    required: false
+    default: .
+  build-method:
+    description: Optional fully-qualified static build method to run.
+    required: false
+  custom-parameters:
+    description: Additional Unity custom parameters to pass through to game-ci/unity-builder.
+    required: false
+  build-name:
+    description: Optional build name passed to game-ci/unity-builder.
+    required: false
+  builds-path:
+    description: Optional output root passed to game-ci/unity-builder.
+    required: false
+    default: build
+  github-token:
+    description: Optional Git token forwarded to unity-builder as gitPrivateToken when needed.
+    required: false
+  allow-dirty-git:
+    description: Allow building with uncommitted changes.
+    required: false
+    default: "false"
+
+outputs:
+  build-version:
+    description: Build version reported by game-ci/unity-builder.
+    value: ${{ steps.builder.outputs.buildVersion }}
+  output-path:
+    description: Root output directory used for the build.
+    value: ${{ steps.paths.outputs.output_path }}
+  artifact-path:
+    description: Platform-specific artifact directory suitable for actions/upload-artifact.
+    value: ${{ steps.paths.outputs.artifact_path }}
+
+runs:
+  using: composite
+  steps:
+    - id: compose-parameters
+      name: Compose Build Metrics parameters
+      shell: bash
+      env:
+        INPUT_CUSTOM_PARAMETERS: ${{ inputs.custom-parameters }}
+        INPUT_BUILD_METRICS_API_KEY: ${{ inputs.build-metrics-api-key }}
+      run: |
+        set -euo pipefail
+
+        custom_parameters="${INPUT_CUSTOM_PARAMETERS:-}"
+
+        append_parameter() {
+          local next="$1"
+          if [ -n "$custom_parameters" ]; then
+            custom_parameters="${custom_parameters} ${next}"
+          else
+            custom_parameters="${next}"
+          fi
+        }
+
+        append_parameter "-BUILD_METRICS_API_KEY ${INPUT_BUILD_METRICS_API_KEY}"
+
+        {
+          echo "custom_parameters<<EOF"
+          printf '%s\n' "$custom_parameters"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - id: builder
+      name: Build Unity project
+      uses: game-ci/unity-builder@v4
+      env:
+        BUILD_METRICS_API_KEY: ${{ inputs.build-metrics-api-key }}
+      with:
+        projectPath: ${{ inputs.project-path }}
+        unityVersion: ${{ inputs.unity-version }}
+        targetPlatform: ${{ inputs.target-platform }}
+        buildMethod: ${{ inputs.build-method }}
+        customParameters: ${{ steps.compose-parameters.outputs.custom_parameters }}
+        buildName: ${{ inputs.build-name }}
+        buildsPath: ${{ inputs.builds-path }}
+        allowDirtyBuild: ${{ inputs.allow-dirty-git }}
+        gitPrivateToken: ${{ inputs.github-token }}
+
+    - id: paths
+      name: Compute wrapper outputs
+      shell: bash
+      env:
+        INPUT_BUILDS_PATH: ${{ inputs.builds-path }}
+        INPUT_TARGET_PLATFORM: ${{ inputs.target-platform }}
+      run: |
+        set -euo pipefail
+
+        output_path="${INPUT_BUILDS_PATH%/}"
+        artifact_path="${output_path}/${INPUT_TARGET_PLATFORM}"
+
+        {
+          echo "output_path=${output_path}"
+          echo "artifact_path=${artifact_path}"
+        } >> "$GITHUB_OUTPUT"
