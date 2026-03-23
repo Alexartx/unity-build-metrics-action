@@ -22,7 +22,7 @@ jobs:
             Library-
 
       - name: Build iOS with Build Metrics
-        uses: moonlightember/unity-build-metrics-action@v1
+        uses: Alexartx/unity-build-metrics-action@v1
         with:
           unity-version: auto
           target-platform: iOS

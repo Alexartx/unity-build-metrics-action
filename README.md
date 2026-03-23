@@ -43,7 +43,7 @@ jobs:
             Library-
 
       - name: Build with Unity Build Metrics
-        uses: moonlightember/unity-build-metrics-action@v1
+        uses: Alexartx/unity-build-metrics-action@v1
         with:
           unity-version: auto
           target-platform: Android
@@ -121,6 +121,6 @@ This Action is intentionally narrow:
 
 ## Related links
 
-- [Build Metrics plugin docs](https://github.com/moonlightember/UnityBuildMetrics/tree/main/packages/unity-plugin)
-- [GitHub Actions integration guide](https://github.com/moonlightember/UnityBuildMetrics/blob/main/packages/unity-plugin/Documentation~/ci-cd/github-actions.md)
+- [Build Metrics plugin docs](https://github.com/Alexartx/UnityBuildMetrics/tree/main/packages/unity-plugin)
+- [GitHub Actions integration guide](https://github.com/Alexartx/UnityBuildMetrics/blob/main/packages/unity-plugin/Documentation~/ci-cd/github-actions.md)
 - [Build Metrics site](https://buildmetrics.moonlightember.com)

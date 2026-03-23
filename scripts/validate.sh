@@ -49,7 +49,7 @@ abort("Expected Marketplace branding") unless action.key?("branding")
 RUBY
 
 for example in "${ROOT_DIR}"/examples/*.yml; do
-  if ! grep -q "moonlightember/unity-build-metrics-action@v1" "${example}"; then
+  if ! grep -q "Alexartx/unity-build-metrics-action@v1" "${example}"; then
     echo "Example does not reference published action: ${example}" >&2
     exit 1
   fi
